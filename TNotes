@@ -1,0 +1,358 @@
+The most common annotations.
+Spring Annotation                                           JAX-RS Annotation
+@RequestMapping(path = "/troopers"  @Path("/troopers")
+@RequestMapping(method = RequestMethod.POST)                @POST
+@RequestMapping(method = RequestMethod.GET)                 @GET
+@RequestMapping(method = RequestMethod.DELETE)              @DELETE
+@ResponseBody                                               N/A
+@RequestBody                                                N/A
+@PathVariable("id")                                         @PathParam("id")
+@RequestParam("xyz")                                        @QueryParam('xyz")
+@RequestParam(value="xyz"                                   @FormParam(“xyz”)
+@RequestMapping(produces = {"application/json"})            @Produces("application/json")
+@RequestMapping(consumes = {"application/json"})            @Consumes("application/json")
+
+--------------------------------------------------------------------------------------------------------------
+IntelliJ IDEA shortcuts:
+
+See methods in Class            Ctrl+F12
+Reformat code                   Ctrl+Alt+L
+Smart completion                Ctrl+Shift+Space
+Search everywhere               Shift x 2
+Debug                           Shift+F9
+Stop debug:                     Ctrl+F2
+View Breakpoints                Ctrl+Shift+F8
+Recent Files                    Ctrl+E
+Recently Changed Files          Ctrl+Shift+E
+Type Hierarchy                  Ctrl+H
+Method Hierarchy                Ctrl+Shift+H
+Call Hierarchy                  Ctrl+Alt+H
+Navigate to Class               Ctrl+N
+Navigate to File                Ctrl+Shift+N
+Navigate to Line                Ctrl+G
+Navigate to Implementation      Ctrl+Alt+B
+Navigate to Type Declaration    Ctrl+Shift+B
+Navigate to Next Method         Alt+Down
+Back                            Ctrl+Alt+Left
+Navigate to Previous Occurrence Ctrl+Alt+Up
+Rename                          Shift+F6
+Extract Method                  Ctrl+Alt+M
+QuickFix                        Alt+Enter
+Favorites                       Alt+2
+Scratch file                    Ctrl + Alt + Shift + Insert (select plain text)
+Remove unused import            Ctrl + Alt + O
+Switch tab                      Alt + left/right
+comment code                    Ctrl + Shift + /
+Show Javadoc                    Ctrl + Q
+
+Name differences:
+Eclipse             IntelliJ IDEA
+Workspace           Project
+Project             Module
+Facet               Facet
+Library             Library
+JRE                 SDK
+Classpath variable  Path variable
+
+--------------------------------------------------------------------------------------------------------------
+à  ALT + 133    À  ALT + 0192
+ç  ALT + 135    Ç  ALT + 128
+é  ALT + 130    É  ALT + 144
+è  ALT + 138    È  ALT + 0200
+ê  ALT + 136    Ê  ALT + 0202
+ù  ALT + 151    Ù  ALT + 0217
+
+--------------------------------------------------------------------------------------------------------------
+To speed up tomcat deployment:
+In config tomcat
+open logback jobservice
+Completely at the bottom there is a place where it appends in console
+comment it
+and restart tomcat
+
+--------------------------------------------------------------------------------------------------------------
+Hibernate cache set to false in platform.properties:
+#persistence
+hibernate.config.use_second_level_cache=false
+hibernate.config.use_query_cache=false
+hibernate.config.generate_statistics=false
+
+--------------------------------------------------------------------------------------------------------------
+For local, open logback.xml:
+
+for each catalina path, change it to point to: C:\MARS_ENV\Migration_jar\logs
+--------------------------------------------------------------------------------------------------------------
+Import postgres database dump: psql -d MARSDB -U postgres -f file.sql
+psql -d MARSDB -U postgres -f db_migration_24-08-2017.dump
+
+Neet to create create 'psql' in environment variable:
+C:\Program Files\PostgreSQL\9.4
+
+--------------------------------------------------------------------------------------------------------------
+command to launch plsql_script on server:
+
+/**
+* U= username
+* D=database Name
+* -h = host (IP for database server)
+* -f = file name(full file path should be provided for the script to be executed)
+*/
+psql -U MARS -d MARSDB -h 10.20.8.141 -f "Script_update_user.sql"
+
+--------------------------------------------------------------------------------------------------------------
+Schema spy command:
+
+java -jar schemaSpy_5.0.0.jar -t pgsql -host localhost -db MARSDB -u MARS -p MARS -dp driver/postgresql-9.3-1101-jdbc4.jar -o z_sschemaHighQuality -all -hq
+
+--------------------------------------------------------------------------------------------------------------
+For changing postgres database (data folder):
+
+1.  Go in folder C:\Program Files\PostgreSQL\9.4
+
+2.  Rename folder data using xcopy command below and select directory when prompted.
+to properly restore it, take the following steps:
+- stop postgres server service
+- copy your current data folder so you don't loose your current setup
+- copy the new data folder instead of the one you had
+
+!! every time you copy/  your folder if must be done with the follwing command, otherwise the postgres server will not start:
+xcopy "C:\Program Files\PostgreSQL\9.4\data_source" "C:\Program Files\PostgreSQL\9.4\data_target" /O /X /E /H /K
+
+--------------------------------------------------------------------------------------------------------------
+POSTMAN:
+1.For user migration:
+POST http://localhost:8080/MigrationService/MigrationUsers/userMig
+localhost:8080/MigrationService/wrapper/MigrationUsers/userMig
+
+Headers:
+Content-Type    application/json
+tenant          z_s
+Accept-Language FR
+api-key         550e8400-e29b-41d4-a716-446655430000
+role-id         4028b8815607410d0156074159dd0464
+user-id         4028b8815607410d015607415ca104dd
+
+Body:
+
+{
+ "abonneLabel": "BAZILE",
+ "idutilisateurV3": 123,
+ "cultureLabel": "fr-fr",
+ "languageLabel": "Français",
+ "idUser": "0",
+ "nom": "Tom",
+ "prenom": "Jerry",
+ "loginName": "titigrosminet",
+ "email": "zsooruth@zs-interactive.com",
+ "actif": true,
+ "sendEmail": false,
+ "roleOrganisations": [{
+   "codeRole": "CLNT",
+   "profilDroits": [{
+     "nomProfil": "Client sans frais OPM"
+    }
+   ]
+  }
+ ]
+}
+
+--------------------------------------------------------------------------------------------------------------
+
+Enhanced setting boolean migration to false:
+DO $$
+DECLARE
+    tables CURSOR FOR
+        select distinct table_name, table_schema from information_schema.columns 
+ where column_name = 'boo_en_migration' 
+ and table_schema='z_s' and table_name not like 'v_%';
+    
+BEGIN
+    FOR table_record IN tables LOOP
+        EXECUTE 'update ' || table_record.table_schema || '.' || table_record.table_name || ' set boo_en_migration=false where boo_en_migration = true';
+    END LOOP;
+end;
+$$;
+
+--------------------------------------------------------------------------------------------------------------
+Anonymisation script:
+
+DO $$
+BEGIN
+
+update z_s.t_user_preferences 
+    set 
+        lib_email = lib_email || '111111',
+        lib_password = '$2a$10$Ul2vp8sd9wyeNb5szxkb3.GB6cQj5EZz2DtlStEKrgJcd22uhRWta';   --Mars2017;
+update z_s.T_TELEPHONE
+    set lib_telephone = lib_telephone || '111111';
+update z_s.T_ADRESSE_MAIL
+    set lib_valeur = lib_valeur || '111111';
+update z_s.t_tenant 
+    set txt_systeme_email_address = 'no-reply-migration-z_s@z_s-interactive.com';
+        
+        
+update pth.t_user_preferences
+    set 
+        lib_email = lib_email || '111111',
+        lib_password = '$2a$10$Ul2vp8sd9wyeNb5szxkb3.GB6cQj5EZz2DtlStEKrgJcd22uhRWta';   --Mars2017;
+update pth.T_TELEPHONE
+    set lib_telephone = lib_telephone || '111111';
+update pth.T_ADRESSE_MAIL
+    set lib_valeur = lib_valeur || '111111';
+update pth.t_tenant 
+    set txt_systeme_email_address = 'no-reply-migration-pth@z_s-interactive.com';
+
+
+update pfhrc.t_user_preferences
+    set 
+        lib_email = lib_email || '111111',
+        lib_password = '$2a$10$Ul2vp8sd9wyeNb5szxkb3.GB6cQj5EZz2DtlStEKrgJcd22uhRWta';   --Mars2017;
+update pfhrc.T_TELEPHONE
+    set lib_telephone = lib_telephone || '111111';
+update pfhrc.T_ADRESSE_MAIL
+    set lib_valeur = lib_valeur || '111111';
+update pfhrc.t_tenant 
+    set txt_systeme_email_address = 'no-reply-migration-pth@z_s-interactive.com';
+END;
+$$;
+
+--------------------------------------------------------------------------------------------------------------
+Command to generate JAR file in project folder 3.11 :
+mvn -am -pl :migration-service-impl clean install -Dp.type=jar -Dscope.provided=compile -DskipTests -Djetty.skip=true
+
+--------------------------------------------------------------------------------------------------------------
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("START setUserActive()");
+		}
+
+
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("END setUserActive()");
+		}
+
+--------------------------------------------------------------------------------------------------------------
+adresseCourrier.setPND(BooleanUtils.isTrue(ccAdresseVO.getPnd())); // use it only with objects Boolean not boolean
+--------------------------------------------------------------------------------------------------------------
+SELECT Orders.OrderID, Customers.CustomerName
+FROM Orders
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID;
+
+left join above will include non match also in Orders..  
+--------------------------------------------------------------------------------------------------------------
+inactive = DateUtils.getDifferenceDays(new Date(), authenticatedUser.getTimestampCreate());
+
+Search for *.Utils.java in the project to know what other utilities they have created.
+
+DateUtils.isWeekend(date);
+--------------------------------------------------------------------------------------------------------------
+number of <br found:
+SELECT DOS_OBJET_DETAIL, REGEXP_COUNT (DOS_OBJET_DETAIL, '<br',1,'i') AS total FROM t_dossier WHERE LOWER(DOS_OBJET_DETAIL) LIKE LOWER('%<br%') AND DOS_DO ='1837236694';  -- maximum 35 of 833 records
+
+--------------------------------------------------------------------------------------------------------------
+
+https://github.com/dfreniche/ocp-java8-notes
+--------------------------------------------------------------------------------------------------------------
+ catch (Exception e) {
+            StringBuilder sb = new StringBuilder();
+            for (StackTraceElement ste : e.getStackTrace()) {
+                sb.append(ste.toString());
+            }
+            LOGGER.info("ERROR in transformerListRelanceCourrier for GED with dossier IDV3: " + gedWrapper.getIdDossierV3() + " with error:" +
+                    sb.toString());
+        }
+
+
+--------------------------------------------------------------------------------------------------------------
+SELECT max(length (lib_info_complementaires)) AS size FROM z_s.t_dossier; 
+---------------------------------------------------------------------------------------------------------------
+Need for serialization :  send over the network or save on disk.
+--------------------------------------------------------------------------------------------------------------
+
+contactVOList.removeIf(value -> StringUtils.isEmpty(value.getPrestataire()) || StringUtils.equalsIgnoreCase("null", value.getPrestataire()));
+
+--------------------------------------------------------------------------------------------------------------
+
+
+
+--------------------------------------------------------------------------------------------------------------
+■■ TreeSet—Sorted and navigable. Does not allow null values.
+■■ TreeMap—Sorted map. Does not allow null keys.
+■■ ArrayDeque—First-in, first-out or last-in, first-out. Does not allow null values.
+
+The filter() method returns a Stream
+filtering on a Predicate. The map() method returns a Stream transforming each element to
+another through a Function. The flatMap() method flattens nested lists into a single level
+and removes empty lists.
+
+There are three primitive stream classes:
+DoubleStream, IntStream, and LongStream. There are also three primitive Optional
+classes: OptionalDouble, OptionalInt, and OptionalLong. There are a good number of
+functional interfaces for primitives.
+
+All code that uses method references can be rewritten as a lambda.
+Not all code that uses lambdas can be rewritten to use a method reference.
+
+The sorted() method is an intermediate operation that sorts a stream.
+There are two versions: the signature with zero parameters that sorts using the natural sort
+order, and the signature with one parameter that sorts using that Comparator as the sort
+order.
+
+In March, the United States springs ahead an hour, and in November, it falls back an hour.
+Know that the language code is lowercase and mandatory. The country code is uppercase if present and follows the language code and an
+underscore.
+
+Common checked exceptions include ParseException, IOException, and SQLException.  The variable in a multi-catch expression is effectively final.  Objects instantiated in the try clause must implement the  AutoCloseable interface.  This interface has a single method close() and can throw any
+type of Exception. Unlike traditional try statements, try-with-resources does not require a catch or finally block to be present. the first one is the primary exception and the others are suppressed exceptions.  A trywith- resources statement is allowed to create suppressed exceptions in the try clause or when closing resources. getSuppressed() allows these exceptions to be retrieved.
+
+Parallel streams can also cause unexpected results, since the results are no longer ordered.  The CyclicBarrier class is used when different threads process a part of computation (ex: 75% complete) and when all threads have completed the execution, the result needs to be combined in the parent thread.  It can be used to force a set of threads to wait until they are at a certain stage of execution before continuing.  
+
+The fork/join framework can be used to create a task that spawns additional tasks to solve problems recursively.  The fork/join framework provides support for parallel programming by splitting up a task into smaller tasks to process them using the available CPU cores.  Deadlock occurs when two or more threads are blocked forever. Starvation occurs when a single thread is perpetually denied access to a shared resource. Livelock is a form of starvation where two or more threads are active but conceptually blocked forever. Finally, race conditions occur when two threads execute at the same time, resulting in an unexpected outcome.
+
+The ObjectInputStream and ObjectOutputStream classes can be used to read and write a Serializable object from and to a stream, respectively.  Java uses views to retrieve all of the file system attributes for a file without numerous round-trips to the operating system.
+
+Closing a Connection automatically closes the Statement and ResultSet objects.  Closing a Statement automatically closes the ResultSet object. Also, running another SQL statement closes the previous ResultSet object from that Statement.
+
+Generics are not covariant. That is, subtyping doesn’t work with generics.  Remember that you cannot add or remove elements to the List returned by the Arrays.asList() method. But, you can make changes to the elements in the returned List, and the changes made to that List are reflected back in the array.
+
+For a resource to be usable in a try-with-resources statement, the class of that resource must implement the java.lang.AutoCloseable interface and define the close() method.  
+
+You can get an instance of Path using the get() method of the Paths class. Path provides two methods to compare Path objects: equals() and compareTo().  Even if two Path objects point to the same file/directory, the equals() method is not guaranteed to return true.  The Files class provides the methods isReadable(), isWritable(), and isExecutable().  Use the delete() method to delete a file; use the deleteIfExists() method to
+delete a file only if it exists.
+
+Always implement the run() method. The default run() method in Thread does nothing.  Call the start() method and not the run() method directly in code. (Leave it to the JVM to call the run() method.).  In java.util.concurrent.atomic package including AtomicBoolean, AtomicInteger,
+AtomicIntegerArray, AtomicLong, AtomicLongArray, AtomicReference<V>, and AtomicReferenceArray<E>.  CyclicBarrier enables threads to wait at a predefined execution point.  When you modify a CopyOnWriteArrayList, a fresh copy of the underlying array is created.  The Fork/Join framework is an implementation of the ExecutorService interface and provides an easy-to-use concurrent platform in order to exploit multiple processors.  The Fork/Join framework uses the work-stealing algorithm: when a worker thread completes its work and is free, it takes (or “steals”) work from other threads that are still busy doing some work.
+
+Parallel streams internally use the fork/join framework. To use parallel streams correctly, the process steps should consist independent tasks.  You can convert a parallel stream to a sequential stream by calling the sequential() method.  You can check if the stream is sequential or parallel by calling the isParallel() method.
+
+If the JDBC API is not able to locate the JDBC driver, it throws a SQLException. If jars for the drivers are available, they need to be included in the classpath to enable the JDBC API to locate the driver.
+
+The class ResourceBundle has two derived classes: PropertyResourceBundle and ListResourceBundle.  When passing the key string to the getObject() method to fetch the matching value in the resource bundle, make sure that the passed keys and the key in the resource bundle exactly match (the keyname is case sensitive). If they don’t match, you'll get a MissingResourceException.
+
+--------------------------------------------------------------------------------------------------------------
+Install Java and set java_home:
+1.  Environment Variables : In System variables, add a new JAVA_HOME variable and point it to the JDK installed folder. Don’t include the \bin folder, just the JDK path.
+
+2.  In System variables, find PATH, click edit and append this %JAVA_HOME%\bin to the end after ';'. 
+
+3. Test: 
+java -version
+javac -version
+
+--------------------------------------------------------------------------------------------------------------
+Install Maven on Windows:
+
+1.  Add both M2_HOME and MAVEN_HOME variables in the Windows environment, and point it to your Maven folder.
+
+2.  Update PATH variable, append Maven bin folder – %M2_HOME%\bin, so that you can run the Maven’s command everywhere.
+
+3.  Test:
+mvn -version
+
+--------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------
+

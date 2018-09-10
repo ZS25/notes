@@ -1,0 +1,35 @@
+%appdata%/Skype/My Skype Received Files
+
+In intelliJ in the run conf:
+-Dcom.atomikos.icatch.file=C:/Tools/apache-tomcat-8.0.39/mars/lib/transaction.properties -Dlog4j.debug=true -Dlogback.ContextSelector=com.dso.resources.logging.CustomContextSelector
+
+
+
+Programming:
+1. Code to interface: IPerson, Service, BO, DAO
+2. Generate concrete class which implements the interfaces: PersonImpl, ServiceImpl, BOImpl, DAOImpl
+3. Create JUnit tests on the concrete class: fail, implement, pass
+
+Commit:
+1. refactor/code clean & compile
+2. update
+3. commit
+Do not commit in any tag.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
