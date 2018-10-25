@@ -11,6 +11,52 @@ Spring Annotation                                           JAX-RS Annotation
 @RequestParam(value="xyz"                                   @FormParam(“xyz”)
 @RequestMapping(produces = {"application/json"})            @Produces("application/json")
 @RequestMapping(consumes = {"application/json"})            @Consumes("application/json")
+--------------------------------------------------------------------------------------------------------------
+Eclipse Keyboard Shortcuts
+
+
+Find class even from jars       Ctrl + Shift + T   
+Find any resource (file)        Ctrl + Shift + R
+Quick fix                       Ctrl + 1
+Organize imports                Ctrl + Shift + o
+Going quickly to a method       Ctrl + o 
+Going back and forth            Alt + right and Alt + left
+Show class in package explorer  Alt + Shift + W
+Navigate from member to member  Ctrl + Shift + Up and down
+Find next/previous              Ctrl + k and Ctrl + Shift +K
+Go to a type declaration        F3
+Toggle between type and subtype Ctrl + T
+Go to other open editors        Ctrl + E
+Move through errors/warnings    Ctrl +. and Ctrl +,
+Through the files you visited   Alt + ← and Alt + →
+Searches method references      CTRL+Shift+G
+Add Javadoc                     Alt + Shift + j
+Find closing brace              CTRL+SHIFT+P
+Autoformatting                  Ctrl + Shift +F
+Close current file              Ctrl+W
+Jump to Editor Window           F12
+Maximize current Editor Window  Ctrl+M
+Show list of open Editors       Ctrl+E
+Open Editor Window Option menu  Alt+-
+Show view menu                  Ctrl+F10
+Zoom text in/ out               Ctrl+Shift++/-
+Jump to previous / next method  Ctrl+Shift+Arrow Down/Arrow Up
+Collapse / Expand method        Ctrl+-/+
+Scroll Editor                   Ctrl+Arrow Down/Ctrl+Arrow Up
+Move selection up or down       Alt+Arrow Up/Arrow Down
+Duplicate current line          Ctrl+Alt+Arrow Up/Ctrl+Alt+Arrow Down/
+Search Workspace                Ctrl+H
+Increase / decrease indent      Tab/Shift+Tab
+Opens Content Assist            Ctrl+Space
+Open Call Hierarchy             Ctrl+Alt+H
+Open Type in Hierarchy          Ctrl+Shift+T
+Rename all references           Alt+Shift+R
+Extract selection to method     Alt+Shift+M
+Change method signature         Alt+Shift+C
+Move element to other class     Alt+Shift+V
+Extract local variable          Alt+Shift+L
+Debug                           F11
+Skip to next Breakpoint         F8
 
 --------------------------------------------------------------------------------------------------------------
 IntelliJ IDEA shortcuts:
