@@ -12,6 +12,17 @@ Spring Annotation                                           JAX-RS Annotation
 @RequestMapping(produces = {"application/json"})            @Produces("application/json")
 @RequestMapping(consumes = {"application/json"})            @Consumes("application/json")
 --------------------------------------------------------------------------------------------------------------
+
+JUnit 5:
+
+@Before annotation is renamed to @BeforeEach
+@After annotation is renamed to @AfterEach
+@BeforeClass annotation is renamed to @BeforeAll
+@AfterClass annotation is renamed to @AfterAll
+@Ignore annotation is renamed to @Disabled
+
+--------------------------------------------------------------------------------------------------------------
+    
 Eclipse Keyboard Shortcuts
 
 
