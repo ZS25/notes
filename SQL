@@ -1,0 +1,89 @@
+SQL
+
+SELECT COUNT(DISTINCT Country) FROM Customers;
+
+SELECT Count(*) AS DistinctCountries
+FROM (SELECT DISTINCT Country FROM Customers);  --same as above
+
+The following operators can be used in the WHERE clause:
+Operator 	Description
+= 	Equal
+<> 	Not equal. Note: In some versions of SQL this operator may be written as !=
+> 	Greater than
+< 	Less than
+>= 	Greater than or equal
+<= 	Less than or equal
+BETWEEN 	Between a certain range
+LIKE 	Search for a pattern
+IN 	To specify multiple possible values for a column
+
+
+
+SELECT * FROM Customers WHERE NOT City = 'Berlin';
+
+SELECT * FROM Customers
+WHERE Country='Germany' AND (City IN ('Berlin','München'));
+
+SELECT * FROM Customers
+ORDER BY Country, CustomerName;   -- if there are multiple records for Argentina, then it will sort their CustomerName
+
+
+
+We do not insert any number into the CustomerID field because CustomerID column is an auto-increment field and will be generated automatically when a new record is inserted into the table.
+
+INSERT INTO Customers (CustomerName, ContactName, Address, City, PostalCode, Country)
+VALUES ('Cardinal', 'Tom B. Erichsen', 'Skagen 21', 'Stavanger', '4006', 'Norway');
+
+
+
+SELECT CustomerName, ContactName, Address
+FROM Customers
+WHERE Address IS NULL;  -- there is also IS NOT NULL
+
+
+
+UPDATE Customers
+SET ContactName = 'Alfred Schmidt', City= 'Frankfurt'
+WHERE CustomerID = 1;  -- If you omit the WHERE clause, all records in the table will be updated!
+
+
+DELETE FROM Customers WHERE CustomerName='Alfreds Futterkiste';  -- If you omit the WHERE clause, all records in the table will be deleted!
+
+
+
+SELECT * FROM Customers LIMIT 10; -- retrive first 10 records to avoid performance problems if there are 10000
+
+
+
+SELECT MIN(Price) AS SmallestPrice
+FROM Products;  -- returns the minimum value in the Price column
+
+-- There is also MIN, MAX, AVG and SUM
+
+
+
+There are two wildcards used in conjunction with the LIKE operator:
+
+    % - The percent sign represents zero, one, or multiple characters
+    _ - The underscore represents a single character
+
+
+There is also NOT LIKE ...
+
+
+
+SELECT * FROM Products
+WHERE Price BETWEEN 10 AND 20;   -- The BETWEEN operator is inclusive.  There is also NOT BETWEEN
+
+
+
+Here are the different types of the JOINs in SQL:
+
+    (INNER) JOIN: Returns records that have matching values in both tables
+    LEFT (OUTER) JOIN: Return all records from the left table, and the matched records from the right table
+    RIGHT (OUTER) JOIN: Return all records from the right table, and the matched records from the left table
+    FULL (OUTER) JOIN: Return all records when there is a match in either left or right table
+
+
+
+
