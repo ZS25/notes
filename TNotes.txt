@@ -406,10 +406,39 @@ Install Maven on Windows:
 mvn -version
 
 --------------------------------------------------------------------------------------------------------------
+Angular:
+https://cli.angular.io/
+
+ng serve
+ng lint
+ng build
+ng test
+ng e2e
+ng generate component welcome
+ng serve
+
+-------------------------------------------------------------------------------------------------------------
+ If your compiler is running out of memory or your IDE is painfully slow, consider increasing the JAVA path heap size. This "out of memory" build error has come up with various developers. The standard for the team seems to be 2048M or 2G. During heavy unit testing or running both self service and ppWeb I have run up to 2000M in usage so 2048 is a good ceiling. If you're using more than this, you likely have inefficiencies somewhere in your IDE settings. Refer to the image on the side for the exact option in your environment variables, that needs changing! :)
+
+IF you don't have admin access, you can go to your environment variables using: rundll32 sysdm.cpl,EditEnvironmentVariables
+
+--------------------------------------------------------------------------------------------------------------
+
+
+
+--------------------------------------------------------------------------------------------------------------
 
 
 
 
+--------------------------------------------------------------------------------------------------------------
+
+
+
+--------------------------------------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------------------------------------
 
